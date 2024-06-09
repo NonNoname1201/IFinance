@@ -35,24 +35,28 @@ struct TransactionHistoryView: View {
             
             List {
                 ForEach(transactions) { transaction in
-                    VStack(alignment: .leading) {
-                        Text(transaction.name ?? "Unknown")
-                            .font(.headline)
-                        Text(String(format: "%.2f", transaction.amount))
-                        Text(transaction.type ?? "Unknown")
-                            .font(.subheadline)
-                    }
+                    TransactionItemView(transaction: transaction)
+                        .onDelete { indexSet in
+                            deleteTransactions(offsets: indexSet)
+                        }
                 }
             }
         }
     }
     
     private func addTransaction() {
+        guard let amount = Double(transactionAmount), amount >= 0 else {
+            // Проверка на корректность суммы транзакции
+            // Выводим уведомление, если сумма некорректна
+            print("Неправильный формат суммы транзакции")
+            return
+        }
+        
         withAnimation {
             let newTransaction = Transaction(context: viewContext)
             newTransaction.timestamp = Date()
             newTransaction.name = transactionName
-            newTransaction.amount = Double(transactionAmount) ?? 0.0
+            newTransaction.amount = amount
             newTransaction.type = transactionType
             
             do {
@@ -61,16 +65,42 @@ struct TransactionHistoryView: View {
                 transactionAmount = ""
                 transactionType = "Obciążenie"
             } catch {
-                // Handle the error appropriately in your app
+                let nsError = error as NSError
+                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            }
+        }
+    }
+    
+    private func deleteTransactions(offsets: IndexSet) {
+        withAnimation {
+            offsets.map { transactions[$0] }.forEach(viewContext.delete)
+            
+            do {
+                try viewContext.save()
+            } catch {
                 let nsError = error as NSError
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
         }
     }
 }
-//
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-//    }
-//}
+
+struct TransactionItemView: View {
+    @ObservedObject var transaction: Transaction
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(transaction.name ?? "Unknown")
+                .font(.headline)
+            Text(String(format: "%.2f", transaction.amount))
+            Text(transaction.type ?? "Unknown")
+                .font(.subheadline)
+        }
+    }
+}
+
+struct TransactionHistoryView_Previews: PreviewProvider {
+    static var previews: some View {
+        TransactionHistoryView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    }
+}
