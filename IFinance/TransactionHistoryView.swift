@@ -11,6 +11,7 @@ struct TransactionHistoryView: View {
     @State private var transactionName: String = ""
     @State private var transactionAmount: String = ""
     @State private var transactionType: String = "Obciążenie"
+    @State private var errorMessage: String = ""
     
     let transactionTypes = ["Obciążenie", "Zaliczenie"]
 
@@ -21,6 +22,14 @@ struct TransactionHistoryView: View {
                     TextField("Nazwa Transakcji", text: $transactionName)
                     TextField("Suma Transakcji", text: $transactionAmount)
                         .keyboardType(.decimalPad)
+                        .onChange(of: transactionAmount) {
+                            newValue in
+                            if let amount = Double(newValue), amount < 0 {
+                                errorMessage = "Nieprawidowy format"
+                            } else {
+                                errorMessage = ""
+                            }
+                        }
                     
                     Picker("Typ Transakcji", selection: $transactionType) {
                         ForEach(transactionTypes, id: \.self) {
@@ -33,22 +42,23 @@ struct TransactionHistoryView: View {
                 }
             }
             
+            if !errorMessage.isEmpty {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+            }
+            
             List {
                 ForEach(transactions) { transaction in
-                    TransactionItemView(transaction: transaction)
-                        .onDelete { indexSet in
-                            deleteTransactions(offsets: indexSet)
+                    TransactionItemView(transaction: transaction)}
+                .onDelete { indexSet in
+                    deleteTransactions(offsets: indexSet)}
                         }
-                }
             }
-        }
     }
     
     private func addTransaction() {
         guard let amount = Double(transactionAmount), amount >= 0 else {
-            // Проверка на корректность суммы транзакции
-            // Выводим уведомление, если сумма некорректна
-            print("Неправильный формат суммы транзакции")
+            errorMessage = "Nieprawidowy format"
             return
         }
         
@@ -87,6 +97,8 @@ struct TransactionHistoryView: View {
 
 struct TransactionItemView: View {
     @ObservedObject var transaction: Transaction
+    
+    
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -96,11 +108,5 @@ struct TransactionItemView: View {
             Text(transaction.type ?? "Unknown")
                 .font(.subheadline)
         }
-    }
-}
-
-struct TransactionHistoryView_Previews: PreviewProvider {
-    static var previews: some View {
-        TransactionHistoryView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
