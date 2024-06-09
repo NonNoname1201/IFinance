@@ -11,9 +11,9 @@ struct MainPageView: View {
                 NavigationLink(destination: LoanCalculationsView()) {
                     Text("Loan Calculations")
                 }
-//                NavigationLink(destination: TransactionHistoryView()) {
-//                    Text("Transaction History + Data Analysis")
-//                }
+                NavigationLink(destination: TransactionHistoryView()) {
+                    Text("Transaction History + Data Analysis")
+                }
             }
         }
     }

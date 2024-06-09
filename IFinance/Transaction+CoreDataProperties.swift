@@ -8,7 +8,6 @@
 
 import Foundation
 import CoreData
-import SwiftUI
 
 
 extension Transaction {
@@ -17,10 +16,10 @@ extension Transaction {
         return NSFetchRequest<Transaction>(entityName: "Transaction")
     }
 
-    @NSManaged public var name: String?
     @NSManaged public var amount: Double
-    @NSManaged public var type: String?
+    @NSManaged public var name: String?
     @NSManaged public var timestamp: Date?
+    @NSManaged public var type: String?
 
 }
 
