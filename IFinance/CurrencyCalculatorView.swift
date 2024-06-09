@@ -49,6 +49,9 @@ struct CurrencyCalculatorView: View {
                 Text("Calculate").font(.title2)
             }.padding()
                 Text(resultText).font(.title)
+                    .onTapGesture {
+                        swap(&selectedFromCurrency, &selectedToCurrency)
+                    }
                 if !errorMessage.isEmpty {
                     Text(errorMessage).foregroundColor(.red)
                 }
