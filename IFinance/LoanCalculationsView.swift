@@ -10,7 +10,7 @@ struct LoanCalculationsView: View {
     @State private var errorMessage2 = ""
     @State private var errorMessage3 = ""
     @State private var errorMessage4 = ""
-
+@State private var activeErrorMessage = ""
 
     var body: some View {
         Form {
@@ -86,29 +86,24 @@ struct LoanCalculationsView: View {
             
 
             if !errorMessage1.isEmpty {
-                Section {
-                    Text(errorMessage1)
-                        .foregroundColor(.red)
-                }
-            }
-            if !errorMessage2.isEmpty {
-                Section {
-                    Text(errorMessage2)
-                        .foregroundColor(.red)
-                }
-            }
-            if !errorMessage3.isEmpty {
-                Section {
-                    Text(errorMessage3)
-                        .foregroundColor(.red)
-                }
-            }
-            if !errorMessage4.isEmpty {
-                Section {
-                    Text(errorMessage4)
-                        .foregroundColor(.red)
-                }
-            }
+    activeErrorMessage = errorMessage1
+}
+if !errorMessage2.isEmpty {
+    activeErrorMessage = errorMessage2
+}
+if !errorMessage3.isEmpty {
+    activeErrorMessage = errorMessage3
+}
+if !errorMessage4.isEmpty {
+    activeErrorMessage = errorMessage4
+}
+
+if !activeErrorMessage.isEmpty {
+    Section {
+        Text(activeErrorMessage)
+            .foregroundColor(.red)
+    }
+}
             
         }
     }

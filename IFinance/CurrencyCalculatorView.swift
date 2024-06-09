@@ -35,24 +35,32 @@ struct CurrencyCalculatorView: View {
             Section {
                 
             Button(action: {
-                if let inputValue = Double(inputValue),
-                   let result = currencyExchange.convert(from: selectedFromCurrency, to: selectedToCurrency, amount: inputValue) {
-                    let resultString = String(format: "%.2f", result)
-                    self.resultText = "\(resultString) \(selectedFromCurrency.rawValue) is \(inputValue) \(selectedToCurrency.rawValue)"
-                    errorMessage = ""
-                } else {
-                    self.resultText = "\(0) \(selectedFromCurrency.rawValue) is \(0) \(selectedToCurrency.rawValue)"
-                    errorMessage = "Please enter a valid data."
-                }
+                calculateConversion()
             })
             {
                 Text("Calculate").font(.title2)
             }.padding()
                 Text(resultText).font(.title)
+                    .onTapGesture {
+        swap(&selectedFromCurrency, &selectedToCurrency)
+        calculateConversion()
+    }
                 if !errorMessage.isEmpty {
                     Text(errorMessage).foregroundColor(.red)
                 }
             }
         }.padding()
     }
+
+    private func calculateConversion() {
+    if let inputValue = Double(inputValue),
+       let result = currencyExchange.convert(from: selectedFromCurrency, to: selectedToCurrency, amount: inputValue) {
+        let resultString = String(format: "%.2f", result)
+        self.resultText = "\(resultString) \(selectedFromCurrency.rawValue) is \(inputValue) \(selectedToCurrency.rawValue)"
+        errorMessage = ""
+    } else {
+        self.resultText = "\(0) \(selectedFromCurrency.rawValue) is \(0) \(selectedToCurrency.rawValue)"
+        errorMessage = "Please enter a valid data."
+    }
+}
 }
