@@ -7,11 +7,11 @@ struct PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         for _ in 0..<10 {
-            let newTransaction = Transaction(context: viewContext)
-            newTransaction.timestamp = Date()
-            newTransaction.name = "Example Transaction"
-            newTransaction.amount = 100.0
-            newTransaction.type = "Obciążenie"
+            //let newTransaction = Transaction(context: viewContext)
+//            newTransaction.timestamp = Date()
+//            newTransaction.name = "Example Transaction"
+//            newTransaction.amount = 100.0
+//            newTransaction.type = "Obciążenie"
         }
         do {
             try viewContext.save()

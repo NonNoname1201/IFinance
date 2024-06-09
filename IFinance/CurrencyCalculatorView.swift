@@ -44,7 +44,7 @@ struct CurrencyCalculatorView: View {
                     self.resultText = "\(0) \(selectedFromCurrency.rawValue) is \(0) \(selectedToCurrency.rawValue)"
                     errorMessage = "Please enter a valid data."
                 }
-            })  
+            })
             {
                 Text("Calculate").font(.title2)
             }.padding()
@@ -54,11 +54,5 @@ struct CurrencyCalculatorView: View {
                 }
             }
         }.padding()
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }
