@@ -4,9 +4,13 @@ struct LoanCalculationsView: View {
     @State private var principalAmount = ""
     @State private var interestRate = ""
     @State private var loanTerm = ""
-    @State private var paymentFrequency = 12 // Assume monthly payments by default
-    @State private var result = 0.0 // New state property for the result
-    @State private var errorMessage = "" // New state property for the error message
+    @State private var paymentFrequency = 12
+    @State private var result = 0.0
+    @State private var errorMessage1 = ""
+    @State private var errorMessage2 = ""
+    @State private var errorMessage3 = ""
+    @State private var errorMessage4 = ""
+
 
     var body: some View {
         Form {
@@ -14,9 +18,9 @@ struct LoanCalculationsView: View {
                 TextField("Enter principal amount", text: $principalAmount)
                     .onChange(of: principalAmount) { newValue in
                         if let value = Double(newValue), value >= 0 {
-                            errorMessage = ""
+                            errorMessage1 = ""
                         } else {
-                            errorMessage = "Please enter a non-negative number for the principal amount."
+                            errorMessage1 = "Please enter a non-negative number for the principal amount."
                         }
                     }
             }
@@ -24,9 +28,9 @@ struct LoanCalculationsView: View {
                 TextField("Enter annual interest rate", text: $interestRate)
                     .onChange(of: interestRate) { newValue in
                         if let value = Double(newValue), value >= 0 {
-                            errorMessage = ""
+                            errorMessage2 = ""
                         } else {
-                            errorMessage = "Please enter a non-negative number for the interest rate."
+                            errorMessage2 = "Please enter a non-negative number for the interest rate."
                         }
                     }
             }
@@ -34,9 +38,9 @@ struct LoanCalculationsView: View {
                 TextField("Enter loan term in years", text: $loanTerm)
                     .onChange(of: loanTerm) { newValue in
                         if let value = Double(newValue), value >= 0 {
-                            errorMessage = ""
+                            errorMessage3 = ""
                         } else {
-                            errorMessage = "Please enter a non-negative number for the loan term."
+                            errorMessage3 = "Please enter a non-negative number for the loan term."
                         }
                     }
             }
@@ -53,26 +57,45 @@ struct LoanCalculationsView: View {
                     let denominator = 1 - pow(1 + monthlyInterestRate, -numberOfPayments)
 
                     let res = numerator / denominator
-                    if res.isNaN || res.isInfinite {
+                    if res.isNaN || res.isInfinite || errorMessage1 != "" || errorMessage2 != "" || errorMessage3 != ""{
                         result = 0.0
-                        errorMessage = "Invalid input. Please check your values."
+                        errorMessage4 = "Invalid input. Please check your values."
                     } else {
                         result = res
-                        errorMessage = ""
+                        errorMessage4 = ""
                     }
                 }) {
                     Text("Calculate")
                 }
                 Section(header: Text("\(paymentFrequency == 12 ? "Monthly" : paymentFrequency == 4 ? "Quarterly" : paymentFrequency == 2 ? "Semi-Annually" : "Annually") Payment")) {
-                    Text("$\(result)")
+                    let resultString = String(format: "%.2f", result)
+                    Text("$\(resultString)")
                 }
             }
 
             
 
-            if !errorMessage.isEmpty {
+            if !errorMessage1.isEmpty {
                 Section {
-                    Text(errorMessage)
+                    Text(errorMessage1)
+                        .foregroundColor(.red)
+                }
+            }
+            if !errorMessage2.isEmpty {
+                Section {
+                    Text(errorMessage2)
+                        .foregroundColor(.red)
+                }
+            }
+            if !errorMessage3.isEmpty {
+                Section {
+                    Text(errorMessage3)
+                        .foregroundColor(.red)
+                }
+            }
+            if !errorMessage4.isEmpty {
+                Section {
+                    Text(errorMessage4)
                         .foregroundColor(.red)
                 }
             }

@@ -11,14 +11,14 @@ struct CurrencyCalculatorView: View {
     var body: some View {
         VStack{
             HStack{
-                Section(header: Text("Kupuję:")) {
+                Section(header: Text("Buying:")) {
                     Picker("Select Currency", selection: $selectedToCurrency) {
                         ForEach(Currency.allCases, id: \.self) { currency in
                             Text(currency.rawValue).tag(currency)
                         }
                     }
                 }
-                Section(header: Text("Placę w:")) {
+                Section(header: Text("Paying in:")) {
                     Picker("Select Currency", selection: $selectedFromCurrency) {
                         ForEach(Currency.allCases, id: \.self) { currency in
                             Text(currency.rawValue).tag(currency)
@@ -29,7 +29,7 @@ struct CurrencyCalculatorView: View {
             Section{
                 TextField("Enter amount", text: $inputValue)
                     .keyboardType(.decimalPad)
-            }.padding().border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/)
+            }.padding()
             
             Section {
                 
