@@ -43,7 +43,7 @@ struct LoanCalculationsView: View {
                 }
             }
 
-            Section(header: Text("Monthly Payment")) {
+            Section(header: Text("\(paymentFrequency == 12 ? "Monthly" : paymentFrequency == 4 ? "Quarterly" : paymentFrequency == 2 ? "Semi-Annually" : "Annually") Payment")) {
                 Text("$\(result)")
             }
             
