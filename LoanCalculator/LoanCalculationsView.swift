@@ -44,6 +44,14 @@ struct LoanCalculationsView: View {
                         }
                     }
             }
+            Section(header: Text("Payment Frequency")) {
+                Picker("Payment Frequency", selection: $paymentFrequency) {
+                    Text("Monthly").tag(12)
+                    Text("Quarterly").tag(4)
+                    Text("Semi-Annually").tag(2)
+                    Text("Annually").tag(1)
+                }
+            }
             Section {
                 Button(action: {
                     let principal = Double(principalAmount) ?? 0
@@ -67,11 +75,13 @@ struct LoanCalculationsView: View {
                 }) {
                     Text("Calculate")
                 }
-                Section(header: Text("\(paymentFrequency == 12 ? "Monthly" : paymentFrequency == 4 ? "Quarterly" : paymentFrequency == 2 ? "Semi-Annually" : "Annually") Payment")) {
+                
+            }
+
+            Section(header: Text("\(paymentFrequency == 12 ? "Monthly" : paymentFrequency == 4 ? "Quarterly" : paymentFrequency == 2 ? "Semi-Annually" : "Annually") Payment")) {
                     let resultString = String(format: "%.2f", result)
                     Text("$\(resultString)")
                 }
-            }
 
             
 
