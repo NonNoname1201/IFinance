@@ -5,6 +5,7 @@ struct CurrencyCalculatorView: View {
     @State private var selectedToCurrency = Currency.eur
     @State private var inputValue = ""
     @State private var resultText = ""
+    @State private var errorMessage = ""
     
     private var currencyExchange = CurrencyExchange()
     
@@ -37,17 +38,22 @@ struct CurrencyCalculatorView: View {
                 if let inputValue = Double(inputValue),
                    let result = currencyExchange.convert(from: selectedFromCurrency, to: selectedToCurrency, amount: inputValue) {
                     let resultString = String(format: "%.2f", result)
-                    self.resultText = "\(resultString) \(selectedFromCurrency.rawValue) to \(inputValue) \(selectedToCurrency.rawValue)"
+                    self.resultText = "\(resultString) \(selectedFromCurrency.rawValue) is \(inputValue) \(selectedToCurrency.rawValue)"
+                    errorMessage = ""
                 } else {
-                    self.resultText = "Invalid input"
+                    self.resultText = "\(0) \(selectedFromCurrency.rawValue) is \(0) \(selectedToCurrency.rawValue)"
+                    errorMessage = "Please enter a valid data."
                 }
             })  
             {
                 Text("Calculate").font(.title2)
             }.padding()
                 Text(resultText).font(.title)
+                if !errorMessage.isEmpty {
+                    Text(errorMessage).foregroundColor(.red)
+                }
             }
-        }.padding().border(Color.black).padding()
+        }.padding()
     }
 }
 
