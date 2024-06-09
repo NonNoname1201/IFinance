@@ -5,7 +5,7 @@ struct LoanCalculationsView: View {
     @State private var interestRate = ""
     @State private var loanTerm = ""
     @State private var paymentFrequency = 12 // Assume monthly payments by default
-    @State private var result = "" // New state property for the result
+    @State private var result = 0.0 // New state property for the result
     @State private var errorMessage = "" // New state property for the error message
 
     var body: some View {
@@ -52,15 +52,23 @@ struct LoanCalculationsView: View {
                     let numerator = monthlyInterestRate * principal
                     let denominator = 1 - pow(1 + monthlyInterestRate, -numberOfPayments)
 
-                    let monthlyPayment = numerator / denominator
+                    let res = numerator / denominator
+                    if res.isNaN || res.isInfinite {
+                        result = 0.0
+                        errorMessage = "Invalid input. Please check your values."
+                    } else {
+                        result = res
+                        errorMessage = ""
+                    }
                 }) {
                     Text("Calculate")
                 }
+                Section(header: Text("\(paymentFrequency == 12 ? "Monthly" : paymentFrequency == 4 ? "Quarterly" : paymentFrequency == 2 ? "Semi-Annually" : "Annually") Payment")) {
+                    Text("$\(result)")
+                }
             }
 
-            Section(header: Text("\(paymentFrequency == 12 ? "Monthly" : paymentFrequency == 4 ? "Quarterly" : paymentFrequency == 2 ? "Semi-Annually" : "Annually") Payment")) {
-                Text("$\(result)")
-            }
+            
 
             if !errorMessage.isEmpty {
                 Section {
