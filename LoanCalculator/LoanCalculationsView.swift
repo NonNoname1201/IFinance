@@ -27,12 +27,26 @@ struct LoanCalculationsView: View {
             }
             Section {
                 Button(action: {
-                    // TODO: Implement loan calculation logic
+                    let principal = Double(principalAmount) ?? 0
+                    let annualInterestRate = Double(interestRate) ?? 0
+                    let termInYears = Double(loanTerm) ?? 0
+
+                    let monthlyInterestRate = annualInterestRate / 100 / Double(paymentFrequency)
+                    let numberOfPayments = termInYears * Double(paymentFrequency)
+
+                    let numerator = monthlyInterestRate * principal
+                    let denominator = 1 - pow(1 + monthlyInterestRate, -numberOfPayments)
+
+                    let monthlyPayment = numerator / denominator
                 }) {
                     Text("Calculate")
                 }
             }
-            // TODO: Display the result
+
+            Section(header: Text("Monthly Payment")) {
+                Text("$\(result)")
+            }
+            
         }
     }
 }
