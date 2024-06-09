@@ -1,0 +1,16 @@
+Kalkulator finansowy służący do konwersji walut, finansowych obliczeń rat oraz przechowywania historii transakcji
+użytkownika i analizą tych danych.
+
+Wymagania:
+3 widoki
+IO + sprawdzenie
+3 gesta
+5 kontrolek
+grafika
+Core data 2 encji
+
+pages:
+0. main page
+1. kalkulator walut
+2. obliczenia rat
+3. analiza danych + historia transakcji
